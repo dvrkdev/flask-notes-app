@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <h1>Welcome to the Notes App!</h1>
+    {% if notes %}
+        <ul class="list-group">
+            {% for note in notes %}
+                <li class="list-group-item d-flex align-items-center justify-content-between">
+                    {{ note.content }}
+                    <button type="submit" class="btn-close" onclick="deleteNote({{ note.id }})"></button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <!-- TODO: change this section thi the better version! -->
+        <p>No notes yet!</p>
+    {% endif %}
+    <h3 class="text-center text-uppercase my-3">Create your note here!</h3>
+    <form action="{{ url_for('main.index') }}" method="post" class="bg-light p-5 border rounded shadow-sm">
+        {{ form.hidden_tag() }}
+        <div class="mb-5">
+            {{ form.content.label(class="form-label") }}
+            {{ form.content(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-lg btn-dark w-100") }}
+    </form>
+{% endblock %}
