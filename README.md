@@ -3,7 +3,7 @@
 A simple **digital notebook** web application built with **Flask, Flask-Login, Flask-WTF, and SQLAlchemy**.
 Users can register, log in, create, and delete notes securely. The app uses **Bootstrap 5** for a responsive UI.
 
-**Live demo:** N/A (self-hosted)
+**Live demo:** [flasknotesapp.pythonanywhere.com](https://flasknotesapp.pythonanywhere.com/)
 
 **GitHub repository:** [https://github.com/dvrkdev/flask-notes-app](https://github.com/dvrkdev/flask-notes-app)
 
