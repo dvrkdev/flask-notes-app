@@ -1,4 +1,5 @@
-from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
+from flask import (Blueprint, flash, jsonify, redirect, render_template,
+                   request, url_for)
 from flask_login import current_user, login_required
 
 from app import db
@@ -61,3 +62,15 @@ def delete_note():
     db.session.commit()
 
     return jsonify({"success": True})
+
+
+# 404 Not Found
+@bp.app_errorhandler(404)
+def not_found_error(error):
+    return render_template("errors/404.html"), 404
+
+
+# 500 Internal Server Error
+@bp.app_errorhandler(500)
+def internal_error(error):
+    return render_template("errors/500.html"), 500
