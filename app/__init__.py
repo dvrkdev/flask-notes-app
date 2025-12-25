@@ -1,14 +1,16 @@
 import os
 
-import dotenv
+from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import CSRFProtect
 
-dotenv.load_dotenv()
+load_dotenv()
 
-login_manager = LoginManager()
 db = SQLAlchemy()
+login_manager = LoginManager()
+csrf = CSRFProtect()
 
 
 def create_app():
@@ -18,25 +20,40 @@ def create_app():
         static_folder="static",
         static_url_path="/",
     )
+
+    # ----------------------------
+    # Configuration
+    # ----------------------------
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///website.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = os.environ.get(
-        "SECRET_KEY", "dev-fallback-key"
-    )  # TODO: use python-dotenv to create local environment variables
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-fallback-key")
 
-    login_manager.init_app(app)
+    # ----------------------------
+    # Extensions
+    # ----------------------------
     db.init_app(app)
+    login_manager.init_app(app)
+    csrf.init_app(app)
 
+    # ----------------------------
+    # Flask-Login
+    # ----------------------------
+    login_manager.login_view = "auth.login"
+    login_manager.login_message = "You must be logged in to access this page."
+    login_manager.login_message_category = "warning"
+
+    # ----------------------------
+    # Blueprints
+    # ----------------------------
     from app.routes import auth, main
 
-    app.register_blueprint(main.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(main.bp)
 
+    # ----------------------------
+    # User loader
+    # ----------------------------
     from app.models import User
-
-    login_manager.login_view = "auth.login"
-    login_manager.login_message = "Please log in to view this page."  # TODO: change this flash message to the better version
-    login_manager.login_message_category = "danger"
 
     @login_manager.user_loader
     def load_user(user_id):

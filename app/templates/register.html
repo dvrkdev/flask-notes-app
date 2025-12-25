@@ -1,25 +1,37 @@
 {% extends "base.html" %}
 {% block title %}Register{% endblock %}
-
 {% block content %}
     <div class="row justify-content-center">
-        <form action="{{ url_for('auth.register') }}" method="post" class="col-md-6">
-            {{ form.hidden_tag() }}
-            <h2 class="text-center mb-4">Registration</h2>
-            <div class="mb-3">
-                {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control form-control-lg") }}
-            </div>
-            <div class="mb-3">
-                {{ form.username.label(class="form-label") }}
-                {{ form.username(class="form-control form-control-lg") }}
-            </div>
-            <div class="mb-5">
-                {{ form.password.label(class="form-label") }}
-                {{ form.password(class="form-control form-control-lg") }}
-            </div>
-            {{ form.submit(class="btn btn-lg btn-success w-100") }}
-        </form>
-        <p class="text-center mt-4">Already have an account? <a href="{{ url_for('auth.login') }}">Login here!</a></p>
+        <div class="col-md-6 col-lg-5">
+            <form action="{{ url_for("auth.register") }}"
+                  method="post"
+                  class="card shadow-sm p-4"
+                  novalidate>
+                {{ form.hidden_tag() }}
+                <h2 class="text-center mb-4">Create an Account</h2>
+                <!-- Name -->
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control form-control-lg" +(" is-invalid" if form.name.errors else "") ,autofocus=True) }}
+                    {% if form.name.errors %}<div class="invalid-feedback">{{ form.name.errors[0] }}</div>{% endif %}
+                </div>
+                <!-- Username -->
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control form-control-lg" +(" is-invalid" if form.username.errors else "") ) }}
+                    {% if form.username.errors %}<div class="invalid-feedback">{{ form.username.errors[0] }}</div>{% endif %}
+                </div>
+                <!-- Password -->
+                <div class="mb-4">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control form-control-lg" +(" is-invalid" if form.password.errors else "") ) }}
+                    {% if form.password.errors %}<div class="invalid-feedback">{{ form.password.errors[0] }}</div>{% endif %}
+                </div>
+                {{ form.submit(class="btn btn-success btn-lg w-100") }}
+            </form>
+            <p class="text-center mt-4">
+                Already have an account? <a href="{{ url_for("auth.login") }}">Login here!</a>
+            </p>
+        </div>
     </div>
 {% endblock %}
