@@ -7,6 +7,8 @@ Users can register, log in, create, and delete notes securely. The app uses **Bo
 
 **GitHub repository:** [https://github.com/dvrkdev/flask-notes-app](https://github.com/dvrkdev/flask-notes-app)
 
+<a href="https://www.flaticon.com/free-icons/paper" title="paper icons">Paper icons created by Pixel perfect - Flaticon</a>
+
 ---
 
 ## Features
