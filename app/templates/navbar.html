@@ -2,8 +2,10 @@
     <div class="container">
         <!-- Brand -->
         <a class="navbar-brand fw-semibold" href="{{ url_for('main.index') }}">
-            <i class="bi bi-journal-text me-1"></i>
-            Notes App
+            <img src="{{ url_for('static', filename='logo.png') }}"
+                 alt="logo"
+                 width="30"
+                 height="30">
         </a>
         <!-- Mobile toggle -->
         <button class="navbar-toggler"

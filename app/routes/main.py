@@ -1,5 +1,4 @@
-from flask import (Blueprint, flash, jsonify, redirect, render_template,
-                   request, url_for)
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
 from app import db
@@ -43,27 +42,38 @@ def index():
 
 
 @bp.route("/edit/<int:id>", methods=["GET", "POST"])
+@login_required
 def edit_note(id):
     note = Note.query.get_or_404(id)
+
+    if note.user_id != current_user.id:
+        flash("You are not allowed to do this", "danger")
+        return redirect(url_for("main.index"))
+
     form = NoteForm(obj=note)
 
     if form.validate_on_submit():
         note.content = form.content.data
         db.session.commit()
-        flash("Note updated", "success")
+        flash("Note updated ✨", "success")
         return redirect(url_for("main.index"))
 
     return render_template("edit_note.html", form=form, note=note)
 
 
-@bp.route("/delete/<int:id>", methods=["GET", "POST"])
+@bp.route("/delete/<int:id>", methods=["POST"])
 @login_required
 def delete_note(id):
     note = Note.query.get_or_404(id)
+
+    if note.user_id != current_user.id:
+        flash("You are not allowed to do this", "danger")
+        return redirect(url_for("main.index"))
+
     db.session.delete(note)
     db.session.commit()
-    flash('Note deleted', 'success')
-    return redirect(url_for('main.index'))
+    flash("Note deleted", "success")
+    return redirect(url_for("main.index"))
 
 
 # 404 Not Found
