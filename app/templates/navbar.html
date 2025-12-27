@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
     <div class="container">
         <!-- Brand -->
         <a class="navbar-brand fw-semibold" href="{{ url_for('main.index') }}">
@@ -11,15 +11,12 @@
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#menuToggler"
-                aria-controls="menuToggler"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
+                data-bs-target="#menuToggler">
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Menu -->
         <div class="collapse navbar-collapse" id="menuToggler">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                 {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link{% if request.endpoint == 'main.index' %} active{% endif %}"
@@ -44,6 +41,14 @@
                            href="{{ url_for('auth.register') }}">Register</a>
                     </li>
                 {% endif %}
+                <!-- Theme toggle -->
+                <li class="nav-item">
+                    <button id="themeToggle"
+                            class="btn btn-outline-secondary btn-sm ms-lg-2"
+                            title="Toggle theme">
+                        <i class="bi bi-moon"></i>
+                    </button>
+                </li>
             </ul>
         </div>
     </div>
