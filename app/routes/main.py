@@ -46,14 +46,14 @@ def index():
 def edit_note(id):
     note = Note.query.get_or_404(id)
     form = NoteForm(obj=note)
-    
+
     if form.validate_on_submit():
         note.content = form.content.data
         db.session.commit()
-        flash('Note updated', 'success')
-        return redirect(url_for('main.index'))
-    
-    return render_template('edit_note.html', form=form, note=note)
+        flash("Note updated", "success")
+        return redirect(url_for("main.index"))
+
+    return render_template("edit_note.html", form=form, note=note)
 
 
 @bp.route("/delete-note", methods=["POST"])

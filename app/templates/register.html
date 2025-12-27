@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <form action="{{ url_for("auth.register") }}"
+            <form action="{{ url_for('auth.register') }}"
                   method="post"
                   class="card shadow-sm p-4"
                   novalidate>
@@ -30,7 +30,7 @@
                 {{ form.submit(class="btn btn-success btn-lg w-100") }}
             </form>
             <p class="text-center mt-4">
-                Already have an account? <a href="{{ url_for("auth.login") }}">Login here!</a>
+                Already have an account? <a href="{{ url_for('auth.login') }}">Login here!</a>
             </p>
         </div>
     </div>

@@ -24,22 +24,20 @@
                             </small>
                         </div>
                         <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2">
-    <!-- Edit -->
-    <a href="{{ url_for('main.edit_note', id=note.id) }}"
-       class="btn btn-sm btn-outline-primary">
-        <i class="bi bi-pencil"></i>
-        Edit
-    </a>
-
-    <!-- Delete -->
-    <button type="button"
-            class="btn btn-sm btn-outline-danger"
-            onclick="confirmDelete({{ note.id }})">
-        <i class="bi bi-trash"></i>
-        Delete
-    </button>
-</div>
-
+                            <!-- Edit -->
+                            <a href="{{ url_for('main.edit_note', id=note.id) }}"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i>
+                                Edit
+                            </a>
+                            <!-- Delete -->
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="confirmDelete({{ note.id }})">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
@@ -58,7 +56,7 @@
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form method="post" action="{{ url_for("main.index") }}">
+                <form method="post" action="{{ url_for('main.index') }}">
                     {{ form.hidden_tag() }}
                     <div class="modal-header">
                         <h5 class="modal-title" id="noteModalLabel">
