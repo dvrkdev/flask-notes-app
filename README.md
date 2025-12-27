@@ -45,7 +45,6 @@ flask run
 
 ## Optional Improvements
 
-* Edit notes
 * Search & filter notes
 * Pagination for many notes
 * Markdown support
