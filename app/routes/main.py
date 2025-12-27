@@ -76,6 +76,18 @@ def delete_note(id):
     return redirect(url_for("main.index"))
 
 
+@bp.route("/note/<int:id>")
+@login_required
+def view_note(id):
+    note = Note.query.get_or_404(id)
+
+    if note.user_id != current_user.id:
+        flash("You are not allowed to view this note", "danger")
+        return redirect(url_for("main.index"))
+
+    return render_template("view_note.html", note=note)
+
+
 # 404 Not Found
 @bp.app_errorhandler(404)
 def not_found_error(error):
