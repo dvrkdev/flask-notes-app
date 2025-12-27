@@ -56,26 +56,14 @@ def edit_note(id):
     return render_template("edit_note.html", form=form, note=note)
 
 
-@bp.route("/delete-note", methods=["POST"])
+@bp.route("/delete/<int:id>", methods=["GET", "POST"])
 @login_required
-def delete_note():
-    data = request.get_json(silent=True)
-
-    if not data or "noteId" not in data:
-        return jsonify({"error": "Invalid request"}), 400
-
-    note = db.session.get(Note, data["noteId"])
-
-    if not note:
-        return jsonify({"error": "Note not found"}), 404
-
-    if note.user_id != current_user.id:
-        return jsonify({"error": "Unauthorized"}), 403
-
+def delete_note(id):
+    note = Note.query.get_or_404(id)
     db.session.delete(note)
     db.session.commit()
-
-    return jsonify({"success": True})
+    flash('Note deleted', 'success')
+    return redirect(url_for('main.index'))
 
 
 # 404 Not Found
