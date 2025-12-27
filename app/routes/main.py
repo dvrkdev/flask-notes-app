@@ -61,7 +61,7 @@ def edit_note(id):
     return render_template("edit_note.html", form=form, note=note)
 
 
-@bp.route("/delete/<int:id>", methods=["POST"])
+@bp.route("/delete/<int:id>", methods=["GET", "POST"])
 @login_required
 def delete_note(id):
     note = Note.query.get_or_404(id)
