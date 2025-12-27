@@ -6,12 +6,9 @@ from app import db
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
-
     id = db.Column(db.Integer, primary_key=True)
-
     name = db.Column(db.String(72), nullable=False)
     username = db.Column(db.String(64), nullable=False, unique=True, index=True)
-
     password_hash = db.Column(db.String(255), nullable=False)
 
     created_at = db.Column(
@@ -33,10 +30,9 @@ class User(db.Model, UserMixin):
 
 class Note(db.Model):
     __tablename__ = "notes"
-
     id = db.Column(db.Integer, primary_key=True)
-
     content = db.Column(db.Text, nullable=False)
+    is_public = db.Column(db.Boolean, default=False, nullable=False)
 
     created_at = db.Column(
         db.DateTime(timezone=True),

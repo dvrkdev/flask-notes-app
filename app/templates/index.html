@@ -78,6 +78,10 @@
                             {{ form.content.label(class="form-label") }}
                             {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") , rows="5",autofocus=True) }}
                             {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
+                            <div class="form-check mt-3">
+                                {{ form.is_public(class="form-check-input") }}
+                                {{ form.is_public.label(class="form-check-label") }}
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

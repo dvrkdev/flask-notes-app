@@ -22,6 +22,10 @@
                     ) }}
                     {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
                 </div>
+                <div class="form-check my-3">
+                    {{ form.is_public(class="form-check-input") }}
+                    {{ form.is_public.label(class="form-check-label") }}
+                </div>
                 <!-- Actions -->
                 <div class="d-flex justify-content-between">
                     <small class="text-muted">
