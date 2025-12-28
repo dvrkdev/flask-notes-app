@@ -81,7 +81,6 @@ Open your browser and visit:
 * 🔍 Search & filter notes
 * 📄 Pagination for large note lists
 * 🧾 Markdown support
-* 🌙 Dark / Light theme toggle
 * 🕒 Edit history or timestamps
 
 ---
