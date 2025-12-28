@@ -12,6 +12,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 
+__version__ = "1.0.0"
 
 def create_app():
     app = Flask(
