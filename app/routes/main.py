@@ -8,6 +8,9 @@ from app.models import Note
 bp = Blueprint("main", __name__)
 
 
+# =========================
+# Home / My Notes
+# =========================
 @bp.route("/", methods=["GET", "POST"])
 @login_required
 def index():
@@ -26,6 +29,7 @@ def index():
     if form.validate_on_submit():
         note = Note(
             content=form.content.data,
+            is_public=form.is_public.data,
             user_id=current_user.id,
         )
         db.session.add(note)
@@ -41,6 +45,25 @@ def index():
     )
 
 
+# =========================
+# View single note
+# =========================
+@bp.route("/note/<int:id>")
+@login_required
+def view_note(id):
+    note = Note.query.get_or_404(id)
+
+    # Private note → only owner
+    if not note.is_public and note.user_id != current_user.id:
+        flash("This note is private 🔒", "danger")
+        return redirect(url_for("main.index"))
+
+    return render_template("view_note.html", note=note)
+
+
+# =========================
+# Edit note
+# =========================
 @bp.route("/edit/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit_note(id):
@@ -54,13 +77,18 @@ def edit_note(id):
 
     if form.validate_on_submit():
         note.content = form.content.data
+        note.is_public = form.is_public.data
         db.session.commit()
+
         flash("Note updated ✨", "success")
         return redirect(url_for("main.index"))
 
     return render_template("edit_note.html", form=form, note=note)
 
 
+# =========================
+# Delete note
+# =========================
 @bp.route("/delete/<int:id>", methods=["GET", "POST"])
 @login_required
 def delete_note(id):
@@ -72,29 +100,37 @@ def delete_note(id):
 
     db.session.delete(note)
     db.session.commit()
+
     flash("Note deleted", "success")
     return redirect(url_for("main.index"))
 
 
-@bp.route("/note/<int:id>")
-@login_required
-def view_note(id):
-    note = Note.query.get_or_404(id)
+# =========================
+# Public notes
+# =========================
+@bp.route("/public")
+def public_notes():
+    notes = (
+        db.session.execute(
+            db.select(Note)
+            .where(Note.is_public.is_(True))
+            .order_by(Note.created_at.desc())
+        )
+        .scalars()
+        .all()
+    )
 
-    if note.user_id != current_user.id:
-        flash("You are not allowed to view this note", "danger")
-        return redirect(url_for("main.index"))
-
-    return render_template("view_note.html", note=note)
+    return render_template("public_notes.html", notes=notes)
 
 
-# 404 Not Found
+# =========================
+# Error handlers
+# =========================
 @bp.app_errorhandler(404)
 def not_found_error(error):
     return render_template("errors/404.html"), 404
 
 
-# 500 Internal Server Error
 @bp.app_errorhandler(500)
 def internal_error(error):
     return render_template("errors/500.html"), 500
