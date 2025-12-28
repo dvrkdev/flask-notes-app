@@ -1,16 +1,48 @@
 {% extends "base.html" %}
 {% block title %}Your Digital Notebook{% endblock %}
 {% block content %}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Your Notes</h1>
-        <button type="button"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#noteModal">
-            <i class="bi bi-plus-lg me-1"></i>
-            Add New Note
-        </button>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center">
+            <!-- User Info -->
+            <div class="mb-3">
+                <h1 class="display-1">
+                    <i class="bi bi-person-bounding-box"></i>
+                </h1>
+                <h1 class="fw-semibold mb-0">{{ current_user.name }}</h1>
+                <p class="text-muted mb-0">@{{ current_user.username }}</p>
+            </div>
+            <hr>
+            <!-- Stats -->
+            <div class="row text-center mb-3">
+                <div class="col">
+                    <div class="p-3">
+                        <h5>Total Notes</h5>
+                        <p class="mb-0">{{ total_notes }}</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <h5>Public Notes</h5>
+                        <p class="mb-0">{{ public_notes }}</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="p-3">
+                        <h5>Private Notes</h5>
+                        <p class="mb-0">{{ private_notes }}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Note Button -->
+            <button type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#noteModal">
+                <i class="bi bi-journal-plus me-1"></i> Add New Note
+            </button>
+        </div>
     </div>
+    <!-- Notes Grid -->
     {% if notes %}
         <div class="row">
             {% for note in notes %}
@@ -19,24 +51,18 @@
                         <div class="card-body d-flex flex-column">
                             {% if note.is_public %}
                                 <span class="badge bg-success mb-2 align-self-start">
-                                    <i class="bi bi-globe"></i>
-                                    Public
+                                    <i class="bi bi-globe"></i> Public
                                 </span>
                             {% endif %}
-                            <!-- Content preview -->
                             <p class="card-text flex-grow-1 note-content">{{ note.content | truncate(100, True, '…') }}</p>
-                            <!-- Meta -->
                             <small class="text-muted">
-                                <i class="bi bi-clock"></i>
-                                {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}
+                                <i class="bi bi-clock"></i> {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}
                             </small>
                         </div>
-                        <!-- Footer -->
                         <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2">
                             <a href="{{ url_for('main.view_note', id=note.id) }}"
                                class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-eye"></i>
-                                View
+                                <i class="bi bi-eye"></i> View
                             </a>
                         </div>
                     </div>
@@ -61,8 +87,7 @@
                     {{ form.hidden_tag() }}
                     <div class="modal-header">
                         <h5 class="modal-title" id="noteModalLabel">
-                            <i class="bi bi-journal-plus me-1"></i>
-                            Add New Note
+                            <i class="bi bi-journal-plus me-1"></i> Add New Note
                         </h5>
                         <button type="button"
                                 class="btn-close"
@@ -72,7 +97,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             {{ form.content.label(class="form-label") }}
-                            {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") , rows="5",autofocus=True) }}
+                            {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") , rows="5", autofocus=True) }}
                             {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
                             <div class="form-check mt-3">
                                 {{ form.is_public(class="form-check-input") }}

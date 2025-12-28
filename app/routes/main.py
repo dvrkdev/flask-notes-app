@@ -8,13 +8,21 @@ from app.models import Note
 bp = Blueprint("main", __name__)
 
 
-# =========================
-# Home / My Notes
-# =========================
 @bp.route("/", methods=["GET", "POST"])
 @login_required
 def index():
     form = NoteForm()
+
+    if form.validate_on_submit():
+        note = Note(
+            content=form.content.data,
+            is_public=form.is_public.data,
+            user_id=current_user.id,
+        )
+        db.session.add(note)
+        db.session.commit()
+        flash("Your note has been created ✨", "success")
+        return redirect(url_for("main.index"))
 
     notes = (
         db.session.execute(
@@ -26,22 +34,17 @@ def index():
         .all()
     )
 
-    if form.validate_on_submit():
-        note = Note(
-            content=form.content.data,
-            is_public=form.is_public.data,
-            user_id=current_user.id,
-        )
-        db.session.add(note)
-        db.session.commit()
-
-        flash("Your note has been created ✨", "success")
-        return redirect(url_for("main.index"))
+    total_notes = len(notes)
+    public_notes = len([note for note in notes if note.is_public])
+    private_notes = total_notes - public_notes
 
     return render_template(
         "index.html",
         form=form,
         notes=notes,
+        total_notes=total_notes,
+        public_notes=public_notes,
+        private_notes=private_notes,
     )
 
 
