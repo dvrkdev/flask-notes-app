@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
+from flask_babel import _  # Import translation function
 
 from app import db
 from app.forms import NoteForm
@@ -21,7 +22,7 @@ def index():
         )
         db.session.add(note)
         db.session.commit()
-        flash("Your note has been created ✨", "success")
+        flash(_("Your note has been created ✨"), "success")
         return redirect(url_for("main.index"))
 
     notes = (
@@ -58,7 +59,7 @@ def view_note(id):
 
     # Private note → only owner
     if not note.is_public and note.user_id != current_user.id:
-        flash("This note is private 🔒", "danger")
+        flash(_("This note is private 🔒"), "danger")
         return redirect(url_for("main.index"))
 
     return render_template("view_note.html", note=note)
@@ -73,7 +74,7 @@ def edit_note(id):
     note = Note.query.get_or_404(id)
 
     if note.user_id != current_user.id:
-        flash("You are not allowed to do this", "danger")
+        flash(_("You are not allowed to do this"), "danger")
         return redirect(url_for("main.index"))
 
     form = NoteForm(obj=note)
@@ -83,7 +84,7 @@ def edit_note(id):
         note.is_public = form.is_public.data
         db.session.commit()
 
-        flash("Note updated ✨", "success")
+        flash(_("Note updated ✨"), "success")
         return redirect(url_for("main.index"))
 
     return render_template("edit_note.html", form=form, note=note)
@@ -98,13 +99,13 @@ def delete_note(id):
     note = Note.query.get_or_404(id)
 
     if note.user_id != current_user.id:
-        flash("You are not allowed to do this", "danger")
+        flash(_("You are not allowed to do this"), "danger")
         return redirect(url_for("main.index"))
 
     db.session.delete(note)
     db.session.commit()
 
-    flash("Note deleted", "success")
+    flash(_("Note deleted"), "success")
     return redirect(url_for("main.index"))
 
 
@@ -124,16 +125,3 @@ def public_notes():
     )
 
     return render_template("public_notes.html", notes=notes)
-
-
-# =========================
-# Error handlers
-# =========================
-@bp.app_errorhandler(404)
-def not_found_error(error):
-    return render_template("errors/404.html"), 404
-
-
-@bp.app_errorhandler(500)
-def internal_error(error):
-    return render_template("errors/500.html"), 500

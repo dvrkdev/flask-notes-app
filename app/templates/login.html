@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Login{% endblock %}
+{% block title %}{{ _('Login') }}{% endblock %}
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
@@ -8,14 +8,12 @@
                   class="card shadow-sm p-4"
                   novalidate>
                 {{ form.hidden_tag() }}
-                <h2 class="text-center mb-4">Welcome back 👋</h2>
-                <!-- Username -->
+                <h2 class="text-center mb-4">{{ _('Welcome back 👋') }}</h2>
                 <div class="mb-3">
                     {{ form.username.label(class="form-label") }}
                     {{ form.username(class="form-control form-control-lg" + (" is-invalid" if form.username.errors else "") , autofocus=True) }}
                     {% if form.username.errors %}<div class="invalid-feedback">{{ form.username.errors[0] }}</div>{% endif %}
                 </div>
-                <!-- Password -->
                 <div class="mb-4">
                     {{ form.password.label(class="form-label") }}
                     {{ form.password(class="form-control form-control-lg" + (" is-invalid" if form.password.errors else "") ) }}
@@ -24,8 +22,8 @@
                 {{ form.submit(class="btn btn-success btn-lg w-100") }}
             </form>
             <p class="text-center mt-4">
-                Don't have an account?
-                <a href="{{ url_for('auth.register') }}">Register here</a>
+                {{ _("Don't have an account?") }}
+                <a href="{{ url_for('auth.register') }}">{{ _('Register here') }}</a>
             </p>
         </div>
     </div>

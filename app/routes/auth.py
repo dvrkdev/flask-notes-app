@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_babel import _  # Import the translation function
 
 from app import db
 from app.forms import LoginForm, RegisterForm
@@ -23,12 +24,13 @@ def login():
 
         if user and check_password_hash(user.password_hash, form.password.data):
             login_user(user)
-            flash(f"Welcome back, {user.name} 👋", "success")
+            # Use f-string with gettext for dynamic names
+            flash(_("Welcome back, %(name)s 👋", name=user.name), "success")
 
             next_page = request.args.get("next")
             return redirect(next_page or url_for("main.index"))
 
-        flash("Invalid username or password.", "danger")
+        flash(_("Invalid username or password."), "danger")
 
     return render_template("login.html", form=form)
 
@@ -51,12 +53,12 @@ def register():
             db.session.add(user)
             db.session.commit()
 
-            flash("Account created successfully 🎉", "success")
+            flash(_("Account created successfully 🎉"), "success")
             return redirect(url_for("auth.login"))
 
         except Exception:
             db.session.rollback()
-            flash("Something went wrong.", "danger")
+            flash(_("Something went wrong."), "danger")
 
     return render_template("register.html", form=form)
 
@@ -65,5 +67,5 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash("You are now logged out.", "info")
+    flash(_("You are now logged out."), "info")
     return redirect(url_for("auth.login"))

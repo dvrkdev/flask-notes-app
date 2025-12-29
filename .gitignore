@@ -3,3 +3,6 @@ __pycache__
 .venv
 instance
 .env
+# Flask-Babel compiled files
+*.mo
+

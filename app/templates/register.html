@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Register{% endblock %}
+{% block title %}{{ _('Register') }}{% endblock %}
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
@@ -8,8 +8,7 @@
                   class="card shadow-sm p-4"
                   novalidate>
                 {{ form.hidden_tag() }}
-                <h2 class="text-center mb-4">Create an Account</h2>
-                <!-- Profile pic URL -->
+                <h2 class="text-center mb-4">{{ _('Create an Account') }}</h2>
                 <div class="mb-3">
                     {{ form.profile_pic_url.label(class="form-label") }}
                     {{ form.profile_pic_url(class="form-control form-control-lg" +(" is-invalid" if form.profile_pic_url.errors else "") ) }}
@@ -17,19 +16,16 @@
                         <div class="invalid-feedback">{{ form.profile_pic_url.errors[0] }}</div>
                     {% endif %}
                 </div>
-                <!-- Name -->
                 <div class="mb-3">
                     {{ form.name.label(class="form-label") }}
                     {{ form.name(class="form-control form-control-lg" +(" is-invalid" if form.name.errors else "") ,autofocus=True) }}
                     {% if form.name.errors %}<div class="invalid-feedback">{{ form.name.errors[0] }}</div>{% endif %}
                 </div>
-                <!-- Username -->
                 <div class="mb-3">
                     {{ form.username.label(class="form-label") }}
                     {{ form.username(class="form-control form-control-lg" +(" is-invalid" if form.username.errors else "") ) }}
                     {% if form.username.errors %}<div class="invalid-feedback">{{ form.username.errors[0] }}</div>{% endif %}
                 </div>
-                <!-- Password -->
                 <div class="mb-4">
                     {{ form.password.label(class="form-label") }}
                     {{ form.password(class="form-control form-control-lg" +(" is-invalid" if form.password.errors else "") ) }}
@@ -38,7 +34,7 @@
                 {{ form.submit(class="btn btn-success btn-lg w-100") }}
             </form>
             <p class="text-center mt-4">
-                Already have an account? <a href="{{ url_for('auth.login') }}">Login here!</a>
+                {{ _('Already have an account?') }} <a href="{{ url_for('auth.login') }}">{{ _('Login here!') }}</a>
             </p>
         </div>
     </div>

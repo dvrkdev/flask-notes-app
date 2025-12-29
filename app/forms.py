@@ -3,6 +3,7 @@ from wtforms import (BooleanField, PasswordField, StringField, SubmitField,
                      TextAreaField, URLField)
 from wtforms.validators import (URL, DataRequired, Length, Optional, Regexp,
                                 ValidationError)
+from flask_babel import lazy_gettext as _l  # Use lazy_gettext for forms
 
 from app import db
 from app.models import User
@@ -10,73 +11,77 @@ from app.models import User
 
 class RegisterForm(FlaskForm):
     name = StringField(
-        "Full name",
-        validators=[DataRequired(), Length(min=3, max=72)],
-        render_kw={"placeholder": "John Doe"},
+        _l("Full name"),
+        validators=[
+            DataRequired(message=_l("This field is required.")), 
+            Length(min=3, max=72)
+        ],
+        render_kw={"placeholder": _l("John Doe")},
     )
 
     username = StringField(
-        "Username",
-        validators=[DataRequired(), Length(min=5, max=64)],
-        render_kw={"placeholder": "john_doe"},
+        _l("Username"),
+        validators=[
+            DataRequired(message=_l("This field is required.")), 
+            Length(min=5, max=64)
+        ],
+        render_kw={"placeholder": _l("john_doe")},
     )
 
     password = PasswordField(
-        "Password",
-        validators=[DataRequired(), Length(min=6, max=128)],
+        _l("Password"),
+        validators=[
+            DataRequired(message=_l("This field is required.")), 
+            Length(min=6, max=128)
+        ],
         render_kw={"placeholder": "••••••••"},
     )
 
     profile_pic_url = URLField(
-        "Profile picture URL (Optional)",
+        _l("Profile picture URL (Optional)"),
         validators=[
             Optional(),
-            URL(),
-            # Regexp(r".*\.(jpg|jpeg|png|webp)$", message="Only image URLs allowed"),
+            URL(message=_l("Invalid URL.")),
         ],
         render_kw={"placeholder": "https://example.com/image.png"},
     )
 
-    submit = SubmitField("Create account")
+    submit = SubmitField(_l("Create account"))
 
     def validate_username(self, username):
-        """
-        WTForms automatically calls:
-        validate_<fieldname>
-        """
         user = db.session.execute(
             db.select(User).where(User.username == username.data)
         ).scalar_one_or_none()
 
         if user:
-            raise ValidationError("This username is already taken.")
+            raise ValidationError(_l("This username is already taken."))
 
 
 class LoginForm(FlaskForm):
     username = StringField(
-        "Username",
-        validators=[DataRequired(), Length(min=5, max=64)],
-        render_kw={"placeholder": "john_doe"},
+        _l("Username"),
+        validators=[DataRequired(message=_l("This field is required."))],
+        render_kw={"placeholder": _l("john_doe")},
     )
 
     password = PasswordField(
-        "Password",
-        validators=[DataRequired(), Length(min=6, max=128)],
+        _l("Password"),
+        validators=[DataRequired(message=_l("This field is required."))],
         render_kw={"placeholder": "••••••••"},
     )
 
-    submit = SubmitField("Login")
+    submit = SubmitField(_l("Login"))
 
 
 class NoteForm(FlaskForm):
     content = TextAreaField(
-        "Note",
-        validators=[DataRequired(), Length(min=1, max=500)],
+        _l("Note"),
+        validators=[DataRequired(message=_l("This field is required.")), Length(min=1, max=500)],
         render_kw={
-            "placeholder": "Write your note here...",
+            "placeholder": _l("Write your note here..."),
             "rows": 5,
         },
     )
-    is_public = BooleanField("Make this note public")
+    is_public = BooleanField(_l("Make this note public"))
 
-    submit = SubmitField("Create note")
+    submit = SubmitField(_l("Create note"))
