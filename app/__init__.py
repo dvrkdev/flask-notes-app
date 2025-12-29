@@ -12,7 +12,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 
-__version__ = "1.1.0"
+__version__ = "1.2.1"
 
 
 def create_app():
