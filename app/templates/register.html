@@ -9,6 +9,14 @@
                   novalidate>
                 {{ form.hidden_tag() }}
                 <h2 class="text-center mb-4">Create an Account</h2>
+                <!-- Profile pic URL -->
+                <div class="mb-3">
+                    {{ form.profile_pic_url.label(class="form-label") }}
+                    {{ form.profile_pic_url(class="form-control form-control-lg" +(" is-invalid" if form.profile_pic_url.errors else "") ) }}
+                    {% if form.profile_pic_url.errors %}
+                        <div class="invalid-feedback">{{ form.profile_pic_url.errors[0] }}</div>
+                    {% endif %}
+                </div>
                 <!-- Name -->
                 <div class="mb-3">
                     {{ form.name.label(class="form-label") }}

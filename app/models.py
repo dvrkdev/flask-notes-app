@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(72), nullable=False)
     username = db.Column(db.String(64), nullable=False, unique=True, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
+    profile_pic_url = db.Column(db.String(255))
 
     created_at = db.Column(
         db.DateTime(timezone=True),

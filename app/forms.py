@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (BooleanField, PasswordField, StringField, SubmitField,
-                     TextAreaField)
-from wtforms.validators import DataRequired, Length, ValidationError
+                     TextAreaField, URLField)
+from wtforms.validators import (URL, DataRequired, Length, Optional, Regexp,
+                                ValidationError)
 
 from app import db
 from app.models import User
@@ -24,6 +25,16 @@ class RegisterForm(FlaskForm):
         "Password",
         validators=[DataRequired(), Length(min=6, max=128)],
         render_kw={"placeholder": "••••••••"},
+    )
+
+    profile_pic_url = URLField(
+        "Profile picture URL (Optional)",
+        validators=[
+            Optional(),
+            URL(),
+            # Regexp(r".*\.(jpg|jpeg|png|webp)$", message="Only image URLs allowed"),
+        ],
+        render_kw={"placeholder": "https://example.com/image.png"},
     )
 
     submit = SubmitField("Create account")

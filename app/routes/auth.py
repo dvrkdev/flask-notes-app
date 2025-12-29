@@ -46,6 +46,7 @@ def register():
                 name=form.name.data,
                 username=form.username.data,
                 password_hash=generate_password_hash(form.password.data),
+                profile_pic_url=form.profile_pic_url.data,
             )
             db.session.add(user)
             db.session.commit()
