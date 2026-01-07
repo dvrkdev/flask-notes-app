@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap5
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 bootstrap5 = Bootstrap5()
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 
 def create_app():
@@ -15,6 +17,14 @@ def create_app():
     # initialize extensions
     bootstrap5.init_app(app)
     db.init_app(app)
+    login_manager.init_app(app)
+
+    # user loader
+    from app.models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
 
     # register blueprints
     from app.routes import auth, main
