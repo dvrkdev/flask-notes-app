@@ -19,6 +19,11 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
+    # login manager setup
+    login_manager.login_view = "auth.login"
+    login_manager.login_message = "Please log in to view this page."
+    login_manager.login_message_category = "info"
+
     # user loader
     from app.models import User
 
