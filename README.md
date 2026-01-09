@@ -1,7 +1,11 @@
-# 📝 Flask Notes App
+# Flask Notes App
 
-A simple note-taking app built with Flask.
+Flask Notes App is a minimal web-based note-taking application built with Flask.
+The project focuses on simplicity and clarity, keeping the core functionality
+easy to understand and extend.
 
-> [!note]
-> The latest source code is available here:  
-> [Latest Release](https://github.com/dvrkdev/flask-notes-app/releases/latest)
+A live demo of the application is available at:
+<https://flasknotesapp.pythonanywhere.com/>
+
+The latest stable source code can always be found here:
+<https://github.com/dvrkdev/flask-notes-app/releases/latest>
