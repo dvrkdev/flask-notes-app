@@ -1,9 +1,10 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_user
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 from app.models import User
+from app import db
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -24,9 +25,19 @@ def login():
     return render_template("auth/login.html", form=form)
 
 
-@bp.route("/register")
+@bp.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("auth/register.html")
+    if current_user.is_authenticated:
+        return redirect(url_for("main.home"))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        user = User(name=form.name.data, username=form.username.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user, remember=True)
+        flash('Your account has been successfully created!', 'success')
+    return render_template("auth/register.html", form=form)
 
 
 @bp.route("/logout")
