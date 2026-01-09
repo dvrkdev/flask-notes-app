@@ -9,7 +9,12 @@ login_manager = LoginManager()
 
 
 def create_app():
-    app = Flask(__name__, template_folder="templates")
+    app = Flask(
+        __name__,
+        template_folder="templates",
+        static_folder="static",
+        static_url_path="/",
+    )
     app.secret_key = "dev-fallback-key-1-22-333-4444-55555"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///note.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

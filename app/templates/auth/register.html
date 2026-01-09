@@ -18,9 +18,7 @@
                     <div class="form-text">{{ form.name.description }}</div>
                     <!-- name errors -->
                     {% if form.name.errors %}
-                        {% for error in form.name.errors %}
-                            <div class="form-text invalid-feedback">{{ error }}</div>
-                        {% endfor %}
+                        {% for error in form.name.errors %}<div class="form-text invalid-feedback">{{ error }}</div>{% endfor %}
                     {% endif %}
                 </div>
                 <!-- ====== USERNAME FIELD ====== -->
@@ -33,9 +31,7 @@
                     <div class="form-text">{{ form.username.description }}</div>
                     <!-- username errors -->
                     {% if form.username.errors %}
-                        {% for error in form.username.errors %}
-                            <div class="form-text invalid-feedback">{{ errors }}</div>
-                        {% endfor %}
+                        {% for error in form.username.errors %}<div class="form-text invalid-feedback">{{ errors }}</div>{% endfor %}
                     {% endif %}
                 </div>
                 <!-- ====== PASSWORD FIELD ====== -->
