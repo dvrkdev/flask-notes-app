@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Homepage | {{ current_user.name }}{% endblock %}
 {% block content %}
+    <!-- user profile -->
     <div class="row justify-content-center">
         <div class="col-md-8">
             {% if current_user.profile_pic_url %}
@@ -18,4 +19,22 @@
             <p class="text-secondary text-center">@{{ current_user.username }}</p>
         </div>
     </div>
+    <!-- user notes -->
+    {% if notes %}
+        <ul>
+            {% for note in notes %}
+                <li>
+                    <a href="#">{{ note.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <!-- note form -->
+    <form action="{{ url_for('main.home') }}" method="post">
+        {{ form.hidden_tag() }}
+        <legend>Note Creation Form</legend>
+        <div class="mb-3">{{ form.title(class="form-control") }}</div>
+        <div class="mb-5">{{ form.content(class="form-control") }}</div>
+        {{ form.submit(class="btn btn-primary btn-lg") }}
+    </form>
 {% endblock %}
