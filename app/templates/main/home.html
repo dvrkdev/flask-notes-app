@@ -21,13 +21,28 @@
     </div>
     <!-- user notes -->
     {% if notes %}
-        <ul>
+        <div class="row">
             {% for note in notes %}
-                <li>
-                    <a href="#">{{ note.title }}</a>
-                </li>
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ note.title }}</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">{{ note.created_at.strftime("%Y-%m-%d %H:%M") }}</h6>
+                            <p class="card-text">{{ note.content | truncate(100, True, '...') }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-end">
+                            <a class="btn btn-sm btn-outline-primary" href="#">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            <i class="bi bi-info-circle me-1"></i> You don't have any notes yet.
+        </div>
     {% endif %}
     <!-- note form -->
     <form action="{{ url_for('main.home') }}" method="post">

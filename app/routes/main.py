@@ -11,7 +11,16 @@ bp = Blueprint("main", __name__, url_prefix="/")
 @bp.route("/", methods=["POST", "GET"])
 @login_required
 def home():
-    notes = Note.query.order_by(Note.created_at.desc()).all()
+    # notes = Note.query.order_by(Note.created_at.desc()).all()
+    notes = (
+        db.session.execute(
+            db.select(Note)
+            .where(Note.user_id == current_user.id)
+            .order_by(Note.created_at.desc())
+        )
+        .scalars()
+        .all()
+    )
     form = NoteForm()
     if form.validate_on_submit():
         note = Note(
