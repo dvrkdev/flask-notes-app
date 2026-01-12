@@ -34,5 +34,7 @@
             {% block content %}{% endblock %}
         </main>
         {{ bootstrap.load_js() }}
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name="body") }}
     </body>
 </html>

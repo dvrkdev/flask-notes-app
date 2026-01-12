@@ -1,3 +1,4 @@
+from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
@@ -80,7 +81,7 @@ class NoteForm(FlaskForm):
         description="Optional note title.",
     )
 
-    content = TextAreaField(
+    content = CKEditorField(
         "Content",
         validators=[
             DataRequired(message="Note content cannot be empty."),

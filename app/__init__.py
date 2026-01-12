@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap5
+from flask_ckeditor import CKEditor
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
@@ -8,6 +9,7 @@ bootstrap5 = Bootstrap5()
 db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+ckeditor = CKEditor()
 
 
 def create_app():
@@ -20,12 +22,24 @@ def create_app():
     app.secret_key = "dev-fallback-key-1-22-333-4444-55555"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///note.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["CKEDITOR_PKG_TYPE"] = "basic"
+    app.config["CKEDITOR_HEIGHT"] = 300
+    app.config["CKEDITOR_LANGUAGE"] = "en"
+    app.config["CKEDITOR_DISABLE_CDN"] = False
+    app.config["CKEDITOR_CONFIG"] = {
+        "default": {
+            "versionCheck": False,
+        },
+        "fontSize_sizes": "12/12px;14/14px;16/16px;18/18px;20/20px;24/24px;32/32px;",
+        "toolbar": [["Bold", "Italic", "Underline"], ["FontSize"]],
+    }
 
     # initialize extensions
     bootstrap5.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+    ckeditor.init_app(app)
 
     # login manager setup
     login_manager.login_view = "auth.login"
