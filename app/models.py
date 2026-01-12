@@ -31,7 +31,7 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128))
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=dt.utcnow)
+    created_at = db.Column(db.DateTime(timezone=True), default=dt.utcnow)
 
     user_id = db.Column(
         db.Integer,
