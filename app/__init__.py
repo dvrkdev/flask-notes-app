@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, request, session
 from flask_babel import Babel, _
+from flask_ckeditor import CKEditor
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
@@ -13,14 +14,14 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 babel = Babel()
+ckeditor = CKEditor()
 
 
 def get_locale():
-    # Priority: 1. Session 2. Browser header
     return session.get("lang") or request.accept_languages.best_match(["en", "uz"])
 
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 
 
 def create_app():
@@ -39,6 +40,12 @@ def create_app():
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-fallback-key")
     app.config["BABEL_DEFAULT_LOCALE"] = "uz"
     app.config["BABEL_SUPPORTED_LOCALES"] = ["en", "uz"]
+    app.config["CKEDITOR_SERVE_LOCAL"] = True
+    app.config["CKEDITOR_PKG_TYPE"] = "basic"
+    app.config["CKEDITOR_ENABLE_CODESNIPPET"] = True
+    app.config["CKEDITOR_HEIGHT"] = 400
+    # app.config["CKEDITOR_UI_COLOR"] = "#9AB8F3"
+    # app.config["CKEDITOR_SKIN"] = "moono-dark"
 
     # ----------------------------
     # Extensions
@@ -46,16 +53,13 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
-
-    # Correctly initialize Babel with the locale selector
-    # babel.init_app(app, locale_selector=get_locale)
+    ckeditor.init_app(app)
     babel.init_app(app)
 
     # ----------------------------
     # Flask-Login
     # ----------------------------
     login_manager.login_view = "auth.login"
-    # Wrap the login message in _() so it can be extracted
     login_manager.login_message = _("You must be logged in to access this page.")
     login_manager.login_message_category = "warning"
 

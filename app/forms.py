@@ -1,4 +1,5 @@
 from flask_babel import lazy_gettext as _l  # Use lazy_gettext for forms
+from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import (BooleanField, PasswordField, StringField, SubmitField,
                      TextAreaField, URLField)
@@ -74,11 +75,11 @@ class LoginForm(FlaskForm):
 
 
 class NoteForm(FlaskForm):
-    content = TextAreaField(
+    content = CKEditorField(
         _l("Note"),
         validators=[
             DataRequired(message=_l("This field is required.")),
-            Length(min=1, max=500),
+            Length(min=1),
         ],
         render_kw={
             "placeholder": _l("Write your note here..."),

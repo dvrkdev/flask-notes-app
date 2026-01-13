@@ -53,6 +53,8 @@
             {% endwith %}
             {% block content %}{% endblock %}
         </main>
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name="content") }}
         <script src="{{ url_for('static', filename='main.js') }}"></script>
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
