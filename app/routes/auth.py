@@ -3,7 +3,7 @@ from flask_babel import _  # Import the translation function
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db
+from app.extensions import db
 from app.forms import LoginForm, RegisterForm
 from app.models import User
 

@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_babel import _  # Import translation function
 from flask_login import current_user, login_required
 
-from app import db
+from app.extensions import db
 from app.forms import NoteForm
 from app.models import Note
 
@@ -49,9 +49,6 @@ def index():
     )
 
 
-# =========================
-# View single note
-# =========================
 @bp.route("/note/<int:id>")
 @login_required
 def view_note(id):
@@ -65,9 +62,6 @@ def view_note(id):
     return render_template("view_note.html", note=note)
 
 
-# =========================
-# Edit note
-# =========================
 @bp.route("/edit/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit_note(id):
@@ -90,9 +84,6 @@ def edit_note(id):
     return render_template("edit_note.html", form=form, note=note)
 
 
-# =========================
-# Delete note
-# =========================
 @bp.route("/delete/<int:id>", methods=["GET", "POST"])
 @login_required
 def delete_note(id):
@@ -109,9 +100,6 @@ def delete_note(id):
     return redirect(url_for("main.index"))
 
 
-# =========================
-# Public notes
-# =========================
 @bp.route("/public")
 def public_notes():
     notes = (
