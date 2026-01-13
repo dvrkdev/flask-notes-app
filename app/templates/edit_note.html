@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Edit Note") }}{% endblock %}
+{% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="fw-semibold mb-0">{{ _("Edit Note") }}</h1>
+            <p class="text-muted">{{ _("Update your note and save changes") }}</p>
+        </div>
+        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>{{ _("Back") }}
+        </a>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.content.label(class="form-label") }}
+                    {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") ,
+                    rows="8",
+                    autofocus=True
+                    ) }}
+                    {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
+                </div>
+                <div class="form-check my-3">
+                    {{ form.is_public(class="form-check-input") }}
+                    {{ form.is_public.label(class="form-check-label") }}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <small class="text-muted">
+                        <i class="bi bi-clock"></i>
+                        {{ _("Created") }} {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}
+                    </small>
+                    <div>
+                        <a href="{{ url_for('main.index') }}"
+                           class="btn btn-outline-secondary me-2">{{ _("Cancel") }}</a>
+                        <button class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i>{{ _("Save Changes") }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
