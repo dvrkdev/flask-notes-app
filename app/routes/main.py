@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
-from flask_babel import _  # Import translation function
+from flask_babel import _
+from flask_ckeditor.utils import cleanify
 from flask_login import current_user, login_required
 
 from app.extensions import db
@@ -16,7 +17,7 @@ def index():
 
     if form.validate_on_submit():
         note = Note(
-            content=form.content.data,
+            content=cleanify(form.content.data),
             is_public=form.is_public.data,
             user_id=current_user.id,
         )

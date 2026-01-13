@@ -1,4 +1,4 @@
-from flask_babel import lazy_gettext as _l  # Use lazy_gettext for forms
+from flask_babel import lazy_gettext as _l
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import (
