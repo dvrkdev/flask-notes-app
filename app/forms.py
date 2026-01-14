@@ -3,6 +3,7 @@ from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import (
     BooleanField,
+    EmailField,
     PasswordField,
     StringField,
     SubmitField,
@@ -12,6 +13,7 @@ from wtforms import (
 from wtforms.validators import (
     URL,
     DataRequired,
+    Email,
     Length,
     Optional,
     Regexp,
@@ -39,6 +41,12 @@ class RegisterForm(FlaskForm):
             Length(min=5, max=64),
         ],
         render_kw={"placeholder": _l("john_doe")},
+    )
+
+    email = EmailField(
+        _l("Email"),
+        validators=[DataRequired(message="This field is required.")],
+        render_kw={"placeholder": _l("john.doe@example.com")},
     )
 
     password = PasswordField(

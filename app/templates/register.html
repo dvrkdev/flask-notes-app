@@ -26,6 +26,11 @@
                     {{ form.username(class="form-control form-control-lg" +(" is-invalid" if form.username.errors else "") ) }}
                     {% if form.username.errors %}<div class="invalid-feedback">{{ form.username.errors[0] }}</div>{% endif %}
                 </div>
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control form-control-lg" +(" is-invalid" if form.email.errors else "") ) }}
+                    {% if form.email.errors %}<div class="invalid-feedback">{{ form.email.errors[0] }}</div>{% endif %}
+                </div>
                 <div class="mb-4">
                     {{ form.password.label(class="form-label") }}
                     {{ form.password(class="form-control form-control-lg" +(" is-invalid" if form.password.errors else "") ) }}
