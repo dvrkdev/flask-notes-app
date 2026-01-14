@@ -20,6 +20,7 @@ def create_app(config_class=DevelopmentConfig):
     ex.ckeditor.init_app(app)
     ex.csrf.init_app(app)
     ex.db.init_app(app)
+    ex.migrate.init_app(app, ex.db)
 
     # login manager configurations
     ex.login_manager.login_view = "auth.login"

@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(72), nullable=False)
     username = db.Column(db.String(64), nullable=False, unique=True, index=True)
+    email = db.Column(db.String(120), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     profile_pic_url = db.Column(db.String(255))
 
