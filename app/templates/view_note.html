@@ -25,7 +25,7 @@
                     {% endif %}
                 </div>
             </header>
-            <article class="note-content lead">{{ note.content | safe }}</article>
+            <article class="note-content">{{ note.content | safe }}</article>
             <hr class="mt-5">
             <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> {{ _("Back to Notes") }}
