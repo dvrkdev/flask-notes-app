@@ -1,51 +1,117 @@
 {% extends "base.html" %}
-{% block title %}{{ _("Your Digital Notebook") }}{% endblock %}
+{% block title %}{{ _("My Notes") }}{% endblock %}
+{% block styles %}
+    <style>
+    .note-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid var(--bs-border-color);
+    }
+    .note-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    .line-clamp-3 {
+        display: -webkit-box;
+        --webkit-line-clamp: 3;
+        --webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+    .profile-header {
+        background: var(--bs-tertiary-bg);
+        border-radius: 1.5rem;
+        padding: 2rem;
+    }
+    </style>
+{% endblock %}
 {% block content %}
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-8 text-center">
-            <div class="mb-3">
+    <div class="profile-header mb-5 shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-md-auto text-center mb-3 mb-md-0">
                 {% if current_user.profile_pic_url %}
                     <img src="{{ current_user.profile_pic_url }}"
-                         class="rounded-circle w-25 mb-3">
+                         class="rounded-circle border border-3 border-primary shadow-sm"
+                         style="width: 100px;
+                                height: 100px;
+                                object-fit: cover">
                 {% else %}
-                    <h1 class="display-1">
-                        <i class="bi bi-person-bounding-box"></i>
-                    </h1>
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm"
+                         style="width: 100px;
+                                height: 100px">
+                        <i class="bi bi-person-fill display-4"></i>
+                    </div>
                 {% endif %}
-                <h1 class="fw-semibold mb-0">{{ current_user.name }}</h1>
-                <p class="text-muted mb-0">@{{ current_user.email }}</p>
-                <p class="text-muted mb-0">@{{ current_user.username }}</p>
             </div>
-            <hr>
-            <a href="{{ url_for('main.add_note') }}"
-                    class="btn btn-primary">
-                <i class="bi bi-journal-plus me-1"></i> {{ _("Add New Note") }}
-        </a>
+            <div class="col text-center text-md-start">
+                <h2 class="fw-bold mb-1">{{ current_user.name }}</h2>
+                <p class="text-muted small mb-0">
+                    <span class="me-3"><i class="bi bi-envelope me-1"></i> {{ current_user.email }}</span>
+                    <span><i class="bi bi-at me-1"></i>{{ current_user.username }}</span>
+                </p>
+            </div>
+            <div class="col-md-auto text-center mt-3 mt-md-0">
+                <a href="{{ url_for('main.add_note') }}"
+                   class="btn btn-primary btn-lg rounded-pill px-4">
+                    <i class="bi bi-plus-lg me-2"></i>{{ _("New Note") }}
+                </a>
+            </div>
         </div>
     </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-semibold mb-0">{{ _("Your Digital Notebook") }}</h3>
+        <span class="badge bg-secondary-subtle text-secondary rounded-pill">{{ notes|length }} {{ _("Notes") }}</span>
+    </div>
     {% if notes %}
-        <div class="row">
+        <div class="row g-4">
             {% for note in notes %}
-                <div class="col-md-6 col-lg-4 mb-3">
-                    <div class="card h-100 shadow-sm note-card">
-                        <div class="card-body">
-                            <p class="card-text"><i class="bi bi-stickies-fill"></i> {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}</p>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm note-card rounded-4 overflow-hidden">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar3 me-1"></i> {{ note.created_at.strftime("%b %d, %Y") }}
+                                </small>
+                                <div class="dropdown">
+                                    <i class="bi bi-three-dots-vertical text-muted cursor-pointer"
+                                       data-bs-toggle="dropdown"></i>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               href="{{ url_for('main.edit_note', id=note.id) }}"><i class="bi bi-pencil me-2"></i>{{ _("Edit") }}</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <form action="{{ url_for('main.delete_note', id=note.id) }}" method="POST">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                <button type="submit"
+                                                        class="dropdown-item text-danger"
+                                                        onclick="return confirm('{{ _("Are you sure?") }}')">
+                                                    <i class="bi bi-trash me-2"></i>{{ _("Delete") }}
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-text note-content line-clamp-3 mb-3">{{ note.content | striptags | safe }}</div>
                         </div>
-                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2">
+                        <div class="card-footer bg-transparent border-0 p-4 pt-0">
                             <a href="{{ url_for('main.view_note', id=note.id) }}"
-                               class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-eye"></i> {{ _("View") }}
-                            </a>
+                               class="btn btn-sm btn-outline-primary w-100 rounded-pill">{{ _("Open Note") }}</a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="alert alert-info text-center" role="alert">
-            <i class="bi bi-info-circle me-1"></i>
-            {{ _("You don't have any notes yet. Click Add New Note to get started!") }}
+        <div class="text-center py-5">
+            <div class="mb-3">
+                <i class="bi bi-journal-x display-1 text-muted"></i>
+            </div>
+            <h4 class="text-muted">{{ _("No notes found") }}</h4>
+            <p class="text-muted">{{ _("Start capturing your brilliant ideas today!") }}</p>
+            <a href="{{ url_for('main.add_note') }}" class="btn btn-link">{{ _("Create your first note") }}</a>
         </div>
     {% endif %}
-
 {% endblock %}

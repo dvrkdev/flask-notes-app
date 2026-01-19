@@ -1,35 +1,99 @@
 {% extends "base.html" %}
 {% block title %}{{ _("View Note") }}{% endblock %}
+{% block styles %}
+    <style>
+    .note-content {
+        line-height: 1.7;
+        font-size: 1.1rem;
+        color: var(--bs-body-color);
+    }
+    /* Ensure CKEditor content like images and tables are responsive */
+    .note-content img { max-width: 100%; height: auto; border-radius: 8px; }
+    .note-content blockquote { 
+        border-left: 4px solid var(--bs-primary); 
+        padding-left: 1rem; 
+        font-style: italic; 
+        color: var(--bs-secondary);
+    }
+    </style>
+{% endblock %}
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8">
-            <header class="border-bottom pb-3 mb-4 d-flex justify-content-between align-items-end">
-                <div>
-                    <h1 class="display-6 fw-bold mb-1">{{ _("Note Details") }}</h1>
-                    <p class="text-muted mb-0">
-                        <i class="bi bi-clock me-1"></i>
-                        {{ _("Created on") }} {{ note.created_at.strftime("%B %d, %Y at %H:%M") }}
-                    </p>
+            <nav aria-label="breadcrumb" class="mb-4">
+                <a href="{{ url_for('main.index') }}"
+                   class="text-decoration-none text-muted small">
+                    <i class="bi bi-chevron-left"></i> {{ _("Back to My Notes") }}
+                </a>
+            </nav>
+            <header class="mb-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h1 class="fw-bold h2 mb-0">{{ _("Note Details") }}</h1>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm"
+                                type="button"
+                                data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{{ url_for('main.edit_note', id=note.id) }}">
+                                    <i class="bi bi-pencil me-2"></i> {{ _("Edit Note") }}
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">
+                                    <i class="bi bi-trash me-2"></i> {{ _("Delete Note") }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="d-flex gap-2">
-                    {% if current_user.is_authenticated and note.user_id == current_user.id %}
-                        <a href="{{ url_for('main.edit_note', id=note.id) }}"
-                           class="btn btn-link link-primary p-0">
-                            <i class="bi bi-pencil"></i> {{ _("Edit") }}
-                        </a>
-                        <span class="text-muted">|</span>
-                        <a href="{{ url_for('main.delete_note', id=note.id) }}"
-                           class="btn btn-link link-danger p-0">
-                            <i class="bi bi-trash"></i> {{ _("Delete") }}
-                        </a>
-                    {% endif %}
+                <div class="text-muted small d-flex align-items-center gap-3">
+                    <span><i class="bi bi-calendar3 me-1"></i> {{ note.created_at.strftime("%B %d, %Y") }}</span>
+                    <span><i class="bi bi-clock me-1"></i> {{ note.created_at.strftime("%H:%M") }}</span>
                 </div>
             </header>
-            <article class="note-content">{{ note.content | safe }}</article>
-            <hr class="mt-5">
-            <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> {{ _("Back to Notes") }}
-            </a>
+            <article class="note-content bg-body-tertiary p-4 p-md-5 rounded-4 shadow-sm border">
+                {{ note.content | safe }}
+            </article>
+            <div class="mt-4 d-flex justify-content-end">
+                <button class="btn btn-sm btn-link text-muted text-decoration-none"
+                        onclick="window.print()">
+                    <i class="bi bi-printer me-1"></i> {{ _("Print Note") }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">{{ _("Delete Note?") }}</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-muted">
+                    {{ _("This action cannot be undone. Are you sure you want to permanently delete this note?") }}
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _("Cancel") }}</button>
+                    <form action="{{ url_for('main.delete_note', id=note.id) }}"
+                          method="POST"
+                          class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger px-4">{{ _("Delete") }}</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
