@@ -5,7 +5,7 @@ from flask import Flask, render_template, request
 from app import extensions as ex
 from config import DevelopmentConfig
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 
 def create_app(config_class=DevelopmentConfig):
