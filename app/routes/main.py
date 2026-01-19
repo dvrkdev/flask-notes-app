@@ -42,12 +42,27 @@ def index():
     )
 
 
+@bp.route("/new", methods=["GET", "POST"])
+def add_note():
+    form = NoteForm()
+    if form.validate_on_submit():
+        new_note = Note(content=cleanify(form.content.data), user_id=current_user.id)
+        try:
+            db.session.add(new_note)
+            db.session.commit()
+            flash(_("Your note has been created!"), "success")
+            return redirect(url_for("main.index"))
+        except Exception as e:
+            db.session.rollback()
+            flash(_("An error occurred while saving the note."), "danger")
+
+    return render_template("main/add_note.html", form=form)
+
+
 @bp.route("/note/<int:id>")
 @login_required
 def view_note(id):
     note = Note.query.get_or_404(id)
-
-    # Private note → only owner
     if note.user_id != current_user.id:
         flash(_("This note is private 🔒"), "danger")
         return redirect(url_for("main.index"))

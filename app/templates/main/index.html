@@ -17,12 +17,10 @@
                 <p class="text-muted mb-0">@{{ current_user.username }}</p>
             </div>
             <hr>
-            <button type="button"
-                    class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#noteModal">
+            <a href="{{ url_for('main.add_note') }}"
+                    class="btn btn-primary">
                 <i class="bi bi-journal-plus me-1"></i> {{ _("Add New Note") }}
-            </button>
+        </a>
         </div>
     </div>
     {% if notes %}
@@ -49,39 +47,5 @@
             {{ _("You don't have any notes yet. Click Add New Note to get started!") }}
         </div>
     {% endif %}
-    <div class="modal fade"
-         id="noteModal"
-         tabindex="-1"
-         aria-labelledby="noteModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <form method="post" action="{{ url_for('main.index') }}">
-                    {{ form.hidden_tag() }}
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="noteModalLabel">
-                            <i class="bi bi-journal-plus me-1"></i> {{ _("Add New Note") }}
-                        </h5>
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            {{ form.content.label(class="form-label") }}
-                            {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") , rows="5", autofocus=True) }}
-                            {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button"
-                                class="btn btn-outline-secondary"
-                                data-bs-dismiss="modal">{{ _("Cancel") }}</button>
-                        <button type="submit" class="btn btn-primary">{{ _("Save Note") }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
 {% endblock %}
