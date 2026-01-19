@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ _("Edit Note") }}{% endblock %}
+
 {% block content %}
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
@@ -7,35 +8,35 @@
             <p class="text-muted">{{ _("Update your note and save changes") }}</p>
         </div>
         <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i>{{ _("Back") }}
+            <i class="bi bi-arrow-left"></i> {{ _("Back") }}
         </a>
     </div>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <form method="post">
-                {{ form.hidden_tag() }}
-                <div class="mb-3">
-                    {{ form.content.label(class="form-label") }}
-                    {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") ,
-                    rows="8",
-                    autofocus=True
-                    ) }}
-                    {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
-                </div>
-                <div class="d-flex justify-content-between">
-                    <small class="text-muted">
-                        <i class="bi bi-clock"></i>
-                        {{ _("Created") }} {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}
-                    </small>
-                    <div>
-                        <a href="{{ url_for('main.index') }}"
-                           class="btn btn-outline-secondary me-2">{{ _("Cancel") }}</a>
-                        <button class="btn btn-primary">
-                            <i class="bi bi-save me-1"></i>{{ _("Save Changes") }}
-                        </button>
-                    </div>
-                </div>
-            </form>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.content.label(class="form-label fw-bold") }}
+            {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else ""),
+               rows="8",
+               autofocus=True
+            ) }}
+            {% if form.content.errors %}
+                <div class="invalid-feedback">{{ form.content.errors[0] }}</div>
+            {% endif %}
         </div>
-    </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted">
+                <i class="bi bi-clock"></i>
+                {{ _("Created") }} {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}
+            </small>
+            <div>
+                <a href="{{ url_for('main.index') }}"
+                   class="btn btn-outline-secondary me-2">{{ _("Cancel") }}</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i> {{ _("Save Changes") }}
+                </button>
+            </div>
+        </div>
+    </form>
 {% endblock %}
