@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request
+from flask import Flask, render_template, request
 
 from app import extensions as ex
 from config import DevelopmentConfig
@@ -45,6 +45,18 @@ def create_app(config_class=DevelopmentConfig):
     #     return request.accept_languages.best_match(
     #         app.config.get("LANGUAGES", ["en", "uz", "ru"])
     #     )
+
+    # Register Error Handlers
+    @app.errorhandler(404)
+    def not_found_error(error):
+        return render_template("errors/404.html"), 404
+
+    @app.errorhandler(500)
+    def internal_error(error):
+        # Crucial: Roll back the session in case of a database error
+        # so subsequent requests don't fail.
+        ex.db.session.rollback()
+        return render_template("errors/500.html"), 500
 
     return app
 
