@@ -36,7 +36,7 @@ def index():
     )
 
     return render_template(
-        "index.html",
+        "main/index.html",
         form=form,
         notes=notes,
     )
@@ -48,11 +48,11 @@ def view_note(id):
     note = Note.query.get_or_404(id)
 
     # Private note → only owner
-    if not note.is_public and note.user_id != current_user.id:
+    if note.user_id != current_user.id:
         flash(_("This note is private 🔒"), "danger")
         return redirect(url_for("main.index"))
 
-    return render_template("view_note.html", note=note)
+    return render_template("main/view_note.html", note=note)
 
 
 @bp.route("/edit/<int:id>", methods=["GET", "POST"])
@@ -73,7 +73,7 @@ def edit_note(id):
         flash(_("Note updated ✨"), "success")
         return redirect(url_for("main.index"))
 
-    return render_template("edit_note.html", form=form, note=note)
+    return render_template("main/edit_note.html", form=form, note=note)
 
 
 @bp.route("/delete/<int:id>", methods=["GET", "POST"])

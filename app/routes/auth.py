@@ -32,7 +32,7 @@ def login():
 
         flash(_("Invalid username or password."), "danger")
 
-    return render_template("login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @bp.route("/register", methods=["GET", "POST"])
@@ -61,7 +61,7 @@ def register():
             db.session.rollback()
             flash(_("Something went wrong."), "danger")
 
-    return render_template("register.html", form=form)
+    return render_template("auth/register.html", form=form)
 
 
 @bp.route("/logout")
