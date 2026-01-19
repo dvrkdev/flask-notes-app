@@ -1,5 +1,7 @@
+from urllib.parse import urlparse
+
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_babel import _  # Import the translation function
+from flask_babel import _
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -16,19 +18,24 @@ def login():
         return redirect(url_for("main.index"))
 
     form = LoginForm()
-
     if form.validate_on_submit():
-        user = db.session.execute(
+        # Clean lookup for user
+        user = db.session.scalar(
             db.select(User).where(User.username == form.username.data)
-        ).scalar_one_or_none()
+        )
 
         if user and check_password_hash(user.password_hash, form.password.data):
-            login_user(user)
-            # Use f-string with gettext for dynamic names
+            login_user(
+                user,
+                remember=getattr(form, "remember_me", False) and form.remember_me.data,
+            )
             flash(_("Welcome back, %(name)s 👋", name=user.name), "success")
 
+            # Validate the 'next' redirect to prevent Open Redirect attacks
             next_page = request.args.get("next")
-            return redirect(next_page or url_for("main.index"))
+            if not next_page or urlparse(next_page).netloc != "":
+                next_page = url_for("main.index")
+            return redirect(next_page)
 
         flash(_("Invalid username or password."), "danger")
 
@@ -41,8 +48,17 @@ def register():
         return redirect(url_for("main.index"))
 
     form = RegisterForm()
-
     if form.validate_on_submit():
+        # Check for existing user to provide helpful feedback
+        existing_user = db.session.scalar(
+            db.select(User).where(
+                (User.username == form.username.data) | (User.email == form.email.data)
+            )
+        )
+        if existing_user:
+            flash(_("Username or email already registered."), "warning")
+            return render_template("auth/register.html", form=form)
+
         try:
             user = User(
                 name=form.name.data,
@@ -54,12 +70,17 @@ def register():
             db.session.add(user)
             db.session.commit()
 
-            flash(_("Account created successfully 🎉"), "success")
-            return redirect(url_for("auth.login"))
+            # --- LOG IN USER AUTOMATICALLY ---
+            login_user(user)
+            flash(
+                _("Registration successful! Welcome, %(name)s! 🚀", name=user.name),
+                "success",
+            )
+            return redirect(url_for("main.index"))
 
         except Exception:
             db.session.rollback()
-            flash(_("Something went wrong."), "danger")
+            flash(_("A database error occurred. Please try again."), "danger")
 
     return render_template("auth/register.html", form=form)
 
@@ -68,5 +89,5 @@ def register():
 @login_required
 def logout():
     logout_user()
-    flash(_("You are now logged out."), "info")
+    flash(_("You have been logged out."), "info")
     return redirect(url_for("auth.login"))

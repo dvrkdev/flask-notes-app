@@ -1,10 +1,24 @@
 from flask_babel import lazy_gettext as _l
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
-from wtforms import (BooleanField, EmailField, PasswordField, StringField,
-                     SubmitField, TextAreaField, URLField)
-from wtforms.validators import (URL, DataRequired, Email, Length, Optional,
-                                Regexp, ValidationError)
+from wtforms import (
+    BooleanField,
+    EmailField,
+    PasswordField,
+    StringField,
+    SubmitField,
+    TextAreaField,
+    URLField,
+)
+from wtforms.validators import (
+    URL,
+    DataRequired,
+    Email,
+    Length,
+    Optional,
+    Regexp,
+    ValidationError,
+)
 
 from app.extensions import db
 from app.models import User
