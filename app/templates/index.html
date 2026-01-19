@@ -17,26 +17,6 @@
                 <p class="text-muted mb-0">@{{ current_user.username }}</p>
             </div>
             <hr>
-            <div class="row text-center mb-3">
-                <div class="col">
-                    <div class="p-3">
-                        <h5>{{ _("Total Notes") }}</h5>
-                        <p class="mb-0">{{ total_notes }}</p>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="p-3">
-                        <h5>{{ _("Public Notes") }}</h5>
-                        <p class="mb-0">{{ public_notes }}</p>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="p-3">
-                        <h5>{{ _("Private Notes") }}</h5>
-                        <p class="mb-0">{{ private_notes }}</p>
-                    </div>
-                </div>
-            </div>
             <button type="button"
                     class="btn btn-primary"
                     data-bs-toggle="modal"
@@ -51,11 +31,6 @@
                 <div class="col-md-6 col-lg-4 mb-3">
                     <div class="card h-100 shadow-sm note-card">
                         <div class="card-body d-flex flex-column">
-                            {% if note.is_public %}
-                                <span class="badge bg-success mb-2 align-self-start">
-                                    <i class="bi bi-globe"></i> {{ _("Public") }}
-                                </span>
-                            {% endif %}
                             <p class="card-text flex-grow-1 note-content">{{ note.content | safe | truncate(100, True, '…') }}</p>
                             <small class="text-muted">
                                 <i class="bi bi-clock"></i> {{ note.created_at.strftime("%Y-%m-%d %H:%M") }}
@@ -100,10 +75,6 @@
                             {{ form.content.label(class="form-label") }}
                             {{ form.content(class="form-control" + (" is-invalid" if form.content.errors else "") , rows="5", autofocus=True) }}
                             {% if form.content.errors %}<div class="invalid-feedback">{{ form.content.errors[0] }}</div>{% endif %}
-                            <div class="form-check mt-3">
-                                {{ form.is_public(class="form-check-input") }}
-                                {{ form.is_public.label(class="form-check-label") }}
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

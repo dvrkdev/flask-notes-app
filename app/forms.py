@@ -106,6 +106,5 @@ class NoteForm(FlaskForm):
             "rows": 5,
         },
     )
-    is_public = BooleanField(_l("Make this note public"))
 
     submit = SubmitField(_l("Create note"))

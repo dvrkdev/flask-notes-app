@@ -34,7 +34,6 @@ class Note(db.Model):
     __tablename__ = "notes"
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    is_public = db.Column(db.Boolean, default=False, nullable=False)
 
     created_at = db.Column(
         db.DateTime(timezone=True),
