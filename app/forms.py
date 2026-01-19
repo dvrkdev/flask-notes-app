@@ -1,24 +1,10 @@
 from flask_babel import lazy_gettext as _l
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
-from wtforms import (
-    BooleanField,
-    EmailField,
-    PasswordField,
-    StringField,
-    SubmitField,
-    TextAreaField,
-    URLField,
-)
-from wtforms.validators import (
-    URL,
-    DataRequired,
-    Email,
-    Length,
-    Optional,
-    Regexp,
-    ValidationError,
-)
+from wtforms import (BooleanField, EmailField, PasswordField, StringField,
+                     SubmitField, URLField)
+from wtforms.validators import (URL, DataRequired, Email, Length, Optional,
+                                ValidationError)
 
 from app.extensions import db
 from app.models import User
@@ -26,9 +12,9 @@ from app.models import User
 
 class RegisterForm(FlaskForm):
     name = StringField(
-        _l("Full name"),
+        _l("Full Name"),
         validators=[
-            DataRequired(message=_l("This field is required.")),
+            DataRequired(message=_l("Please enter your name.")),
             Length(min=3, max=72),
         ],
         render_kw={"placeholder": _l("John Doe")},
@@ -37,74 +23,79 @@ class RegisterForm(FlaskForm):
     username = StringField(
         _l("Username"),
         validators=[
-            DataRequired(message=_l("This field is required.")),
+            DataRequired(message=_l("Please choose a username.")),
             Length(min=5, max=64),
         ],
         render_kw={"placeholder": _l("john_doe")},
     )
 
     email = EmailField(
-        _l("Email"),
-        validators=[DataRequired(message="This field is required.")],
+        _l("Email Address"),
+        validators=[
+            DataRequired(message=_l("Email is required.")),
+            Email(message=_l("Please enter a valid email address.")),
+        ],
         render_kw={"placeholder": _l("john.doe@example.com")},
     )
 
     password = PasswordField(
         _l("Password"),
         validators=[
-            DataRequired(message=_l("This field is required.")),
+            DataRequired(message=_l("Please set a password.")),
             Length(min=6, max=128),
         ],
         render_kw={"placeholder": "••••••••"},
     )
 
     profile_pic_url = URLField(
-        _l("Profile picture URL (Optional)"),
+        _l("Profile Picture URL"),
         validators=[
             Optional(),
-            URL(message=_l("Invalid URL.")),
+            URL(message=_l("Enter a valid image URL.")),
         ],
         render_kw={"placeholder": "https://example.com/image.png"},
     )
 
-    submit = SubmitField(_l("Create account"))
+    submit = SubmitField(_l("Create Account"))
 
     def validate_username(self, username):
-        user = db.session.execute(
-            db.select(User).where(User.username == username.data)
-        ).scalar_one_or_none()
-
+        user = db.session.scalar(db.select(User).where(User.username == username.data))
         if user:
             raise ValidationError(_l("This username is already taken."))
+
+    def validate_email(self, email):
+        user = db.session.scalar(db.select(User).where(User.email == email.data))
+        if user:
+            raise ValidationError(_l("This email is already registered."))
 
 
 class LoginForm(FlaskForm):
     username = StringField(
         _l("Username"),
-        validators=[DataRequired(message=_l("This field is required."))],
+        validators=[DataRequired(message=_l("Username is required."))],
         render_kw={"placeholder": _l("john_doe")},
     )
 
     password = PasswordField(
         _l("Password"),
-        validators=[DataRequired(message=_l("This field is required."))],
+        validators=[DataRequired(message=_l("Password is required."))],
         render_kw={"placeholder": "••••••••"},
     )
+
+    remember_me = BooleanField(_l("Keep me logged in"))  # Standard UX addition
 
     submit = SubmitField(_l("Login"))
 
 
 class NoteForm(FlaskForm):
     content = CKEditorField(
-        _l("Note"),
+        _l("Note Content"),
         validators=[
-            DataRequired(message=_l("This field is required.")),
-            Length(min=1),
+            DataRequired(message=_l("Your note cannot be empty.")),
         ],
         render_kw={
-            "placeholder": _l("Write your note here..."),
-            "rows": 5,
+            "placeholder": _l("Write your thoughts here..."),
         },
     )
 
-    submit = SubmitField(_l("Create note"))
+    submit = SubmitField(_l("Save Note"))  # Generic name works for both Add and Edit
