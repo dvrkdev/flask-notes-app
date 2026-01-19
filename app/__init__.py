@@ -38,13 +38,13 @@ def create_app(config_class=DevelopmentConfig):
         # Using db.session.get is the modern way in SQLAlchemy 2.0+
         return ex.db.session.get(User, int(user_id))
 
-    # 5. Language Selection (Essential for Flask-Babel)
-    @ex.babel.localeselector
-    def get_locale():
-        # Check for user-specific locale, then session, then header
-        return request.accept_languages.best_match(
-            app.config.get("LANGUAGES", ["en", "uz", "ru"])
-        )
+    # # 5. Language Selection (Essential for Flask-Babel)
+    # @ex.babel.localeselector
+    # def get_locale():
+    #     # Check for user-specific locale, then session, then header
+    #     return request.accept_languages.best_match(
+    #         app.config.get("LANGUAGES", ["en", "uz", "ru"])
+    #     )
 
     return app
 
