@@ -16,11 +16,15 @@
               href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link rel="stylesheet"
               href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
         <style>
         :root { --bs-body-font-family: "Google Sans", sans-serif; }
         body { min-height: 100vh; display: flex; flex-direction: column; }
         main { flex: 1; }
         .alert { border: none; border-radius: 12px; }
+        /* Style adjustments for code blocks */
+        pre code { border-radius: 8px; font-family: 'Fira Code', monospace; }
         </style>
         {% block styles %}{% endblock %}
     </head>
@@ -54,7 +58,9 @@
             </div>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        {# Only load CKEditor if the block is called in a form template #}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+        <script>hljs.highlightAll();</script>
         {% if ckeditor is defined %}
             {{ ckeditor.load() }}
             {{ ckeditor.config(name="content") }}
