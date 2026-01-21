@@ -57,14 +57,14 @@ def create_app(config_class=DevelopmentConfig):
         # so subsequent requests don't fail.
         ex.db.session.rollback()
         return render_template("errors/500.html"), 500
-    
+
     # Template filter
     @app.template_filter("truncatewords")
     def truncatewords_filter(s, num=20):
         words = s.split()
         if len(words) <= num:
             return s
-        return ' '.join(words[:num]) + '...'
+        return " ".join(words[:num]) + "..."
 
     return app
 
