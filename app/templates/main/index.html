@@ -61,57 +61,71 @@
         <span class="badge bg-secondary-subtle text-secondary rounded-pill">{{ notes|length }} {{ _("Notes") }}</span>
     </div>
     {% if notes %}
-        <div class="row g-4">
-            {% for note in notes %}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm note-card rounded-4 overflow-hidden">
-                        <div class="card-body p-4">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <small class="text-muted">
-                                    <i class="bi bi-calendar3 me-1"></i> {{ note.created_at.strftime("%b %d, %Y") }}
-                                </small>
-                                <div class="dropdown">
-                                    <i class="bi bi-three-dots-vertical text-muted cursor-pointer"
-                                       data-bs-toggle="dropdown"></i>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                                        <li>
-                                            <a class="dropdown-item"
-                                               href="{{ url_for('main.edit_note', id=note.id) }}"><i class="bi bi-pencil me-2"></i>{{ _("Edit") }}</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li>
-                                            <form action="{{ url_for('main.delete_note', id=note.id) }}" method="POST">
-                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                                <button type="submit"
-                                                        class="dropdown-item text-danger"
-                                                        onclick="return confirm('{{ _("Are you sure?") }}')">
-                                                    <i class="bi bi-trash me-2"></i>{{ _("Delete") }}
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
+    <div class="row g-4">
+        {% for note in notes %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm note-card rounded-4 overflow-hidden position-relative">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <small class="text-muted">
+                                <i class="bi bi-calendar3 me-1"></i> 
+                                {# Display Date: Jan 21, 2026 #}
+                                {{ note.created_at.strftime("%b %d, %Y") }}
+                                <span class="mx-1">•</span>
+                                {# Display Time: 11:45 PM #}
+                                {{ note.created_at.strftime("%I:%M %p") }}
+                            </small>
+                            
+                            <div class="dropdown position-relative" style="z-index: 2;">
+                                <i class="bi bi-three-dots-vertical text-muted cursor-pointer"
+                                   data-bs-toggle="dropdown" aria-expanded="false"></i>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ url_for('main.edit_note', id=note.id) }}">
+                                            <i class="bi bi-pencil me-2"></i>{{ _("Edit") }}
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form action="{{ url_for('main.delete_note', id=note.id) }}" method="POST">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="dropdown-item text-danger"
+                                                    onclick="return confirm('{{ _("Are you sure?") }}')">
+                                                <i class="bi bi-trash me-2"></i>{{ _("Delete") }}
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="card-text note-content line-clamp-3 mb-3">{{ note.content | striptags | safe }}</div>
                         </div>
-                        <div class="card-footer bg-transparent border-0 p-4 pt-0">
-                            <a href="{{ url_for('main.view_note', id=note.id) }}"
-                               class="btn btn-sm btn-outline-primary w-100 rounded-pill">{{ _("Open Note") }}</a>
+
+                        {# TRUNCATION LOGIC: striptags prevents HTML from breaking the layout #}
+                        <div class="card-text note-content line-clamp-3 mb-3">
+                            {{ note.content | striptags | truncate(150, end='...') }}
                         </div>
                     </div>
+
+                    <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                        {# 'stretched-link' makes the entire card clickable #}
+                        <a href="{{ url_for('main.view_note', id=note.id) }}"
+                           class="btn btn-sm btn-outline-primary w-100 rounded-pill stretched-link">
+                           {{ _("Open Note") }}
+                        </a>
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="text-center py-5">
-            <div class="mb-3">
-                <i class="bi bi-journal-x display-1 text-muted"></i>
             </div>
-            <h4 class="text-muted">{{ _("No notes found") }}</h4>
-            <p class="text-muted">{{ _("Start capturing your brilliant ideas today!") }}</p>
-            <a href="{{ url_for('main.add_note') }}" class="btn btn-link">{{ _("Create your first note") }}</a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <div class="mb-3">
+            <i class="bi bi-journal-x display-1 text-muted"></i>
         </div>
-    {% endif %}
+        <h4 class="text-muted">{{ _("No notes found") }}</h4>
+        <p class="text-muted">{{ _("Start capturing your brilliant ideas today!") }}</p>
+        <a href="{{ url_for('main.add_note') }}" class="btn btn-primary rounded-pill px-4">
+            {{ _("Create your first note") }}
+        </a>
+    </div>
+{% endif %}
 {% endblock %}
