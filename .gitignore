@@ -1,6 +1,0 @@
-.venv
-.vscode
-__pycache__
-instance
-*.mo
-migrations
