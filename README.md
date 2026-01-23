@@ -3,7 +3,6 @@
 Flask Notes App is a minimal, secure, and responsive web-based note-taking application designed with simplicity in mind, providing a clean interface for capturing thoughts while following modern [Flask](https://flask.palletsprojects.com/) and [SQLAlchemy](https://www.sqlalchemy.org/) patterns. A live demo of the Flask Notes App is available at [Flask Notes App Live Demo](https://flasknotesapp.pythonanywhere.com/).
 
 > [!NOTE]
-> **Note:**
 > The GitHub repository currently does not contain any code in the main directory. The code is available in the [v1.5.0 release](https://github.com/dvrkdev/flask-notes-app/releases/tag/v1.5.0).
 
 The app features secure authentication with user registration and login managed via Flask-Login, full CRUD functionality for creating, reading, updating, and deleting notes, and rich text editing through CKEditor. It has a modern, responsive UI built with Bootstrap 5.3, including a Dark Mode toggle, multi-language support with Flask-Babel, and robust security measures such as CSRF protection, password hashing with Werkzeug, and Open Redirect prevention.
