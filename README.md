@@ -1,102 +1,10 @@
-# 📓 Flask Notes App
+# Flask Notes App
 
-Flask Notes App is a minimal, secure, and responsive web-based note-taking application. It is designed with simplicity in mind, providing a clean interface for capturing thoughts while following modern Flask and SQLAlchemy patterns.
+Flask Notes App is a minimal, secure, and responsive web-based note-taking application designed with simplicity in mind, providing a clean interface for capturing thoughts while following modern [Flask](https://flask.palletsprojects.com/) and [SQLAlchemy](https://www.sqlalchemy.org/) patterns. A live demo of the Flask Notes App is available at [Flask Notes App Live Demo](https://flasknotesapp.pythonanywhere.com/).
 
-🚀 **Live Demo:** [https://flasknotesapp.pythonanywhere.com/](https://flasknotesapp.pythonanywhere.com/)
+> [!note] **Note:**
+> The GitHub repository currently does not contain any code in the main directory. The code is available in the [v1.5.0 release](https://github.com/dvrkdev/flask-notes-app/releases/tag/v1.5.0).
 
----
+The app features secure authentication with user registration and login managed via Flask-Login, full CRUD functionality for creating, reading, updating, and deleting notes, and rich text editing through CKEditor. It has a modern, responsive UI built with Bootstrap 5.3, including a Dark Mode toggle, multi-language support with Flask-Babel, and robust security measures such as CSRF protection, password hashing with Werkzeug, and Open Redirect prevention.
 
-## ✨ Features
-
-* **Secure Authentication:** User registration and login with session management via Flask-Login.
-* **Full CRUD:** Create, Read, Update, and Delete notes with ease.
-* **Rich Text Editing:** Integrated with CKEditor for formatted notes (bold, lists, etc.).
-* **Modern UI:** Responsive design built with Bootstrap 5.3 and a built-in Dark Mode toggle.
-* **Internationalization:** Multi-language support (English, Uzbek, Russian) powered by Flask-Babel.
-* **Security First:** CSRF protection, password hashing with Werkzeug, and Open Redirect prevention.
-
----
-
-## 📂 Project Structure
-
-```text
-flask-notes-app/
-├── app/
-│   ├── models.py          # Database schemas (User, Note)
-│   ├── forms.py           # WTForms for Auth and Notes
-│   ├── routes/            # Blueprints (auth.py, main.py)
-│   ├── extensions.py      # Extension initializations (DB, Login, etc.)
-│   ├── static/            # CSS, JS, and Images
-│   └── templates/         # Jinja2 HTML templates
-├── migrations/            # Flask-Migrate database history
-├── config.py              # Environment configurations
-├── main.py                # Application entry point
-└── requirements/          # Dependency files (common.txt, dev.txt)
-
-```
-
----
-
-## 🛠️ Installation & Setup
-
-### 1. Clone the repository
-
-```bash
-git clone [https://github.com/dvrkdev/flask-notes-app.git](https://github.com/dvrkdev/flask-notes-app.git)
-cd flask-notes-app
-
-```
-
-### 2. Create and activate a virtual environment
-
-```bash
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# Linux/macOS:
-source venv/bin/activate
-
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements/dev.txt
-
-```
-
-### 4. Set up environment variables
-
-Create a `.env` file in the root directory:
-
-```env
-FLASK_APP=main.py
-FLASK_DEBUG=True
-SECRET_KEY=your-secret-key-here
-DATABASE_URL=sqlite:///app.db
-
-```
-
-### 5. Initialize the Database
-
-```bash
-flask db upgrade
-
-```
-
-### 6. Run the application
-
-```bash
-flask run
-
-```
-
----
-
-## 📜 License & Credits
-
-* **Framework:** [Flask](https://flask.palletsprojects.com/)
-* **Database:** [SQLAlchemy](https://www.sqlalchemy.org/)
-* **Icons:** [Notes icons by Freepik - Flaticon](https://www.flaticon.com/free-icons/notes)
-
-Distributed under the MIT License. See `LICENSE` for more information.
+The project structure includes organized directories for models, forms, routes, extensions, static files, and templates, with migrations handled by Flask-Migrate and configurations in `config.py`. To set it up, clone the repository, create and activate a virtual environment, install dependencies from `requirements/dev.txt`, configure environment variables in a `.env` file, initialize the database with `flask db upgrade`, and run the app using `flask run`. The project uses Flask and SQLAlchemy, with icons credited to [Freepik via Flaticon](https://www.flaticon.com/free-icons/notes), and is distributed under the MIT License.
