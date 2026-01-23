@@ -1,8 +1,8 @@
 from flask_babel import lazy_gettext as _l
-from flask_ckeditor import CKEditorField
+# from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import (BooleanField, EmailField, PasswordField, StringField,
-                     SubmitField, URLField)
+                     SubmitField, TextAreaField, URLField)
 from wtforms.validators import (URL, DataRequired, Email, Length, Optional,
                                 ValidationError)
 
@@ -88,14 +88,17 @@ class LoginForm(FlaskForm):
 
 
 class NoteForm(FlaskForm):
-    content = CKEditorField(
-        _l("Note Content"),
+    content = TextAreaField(
+        _l("Content"),
         validators=[
             DataRequired(message=_l("Your note cannot be empty.")),
+            Length(max=280, message=_l("Please keep your note under 280 characters.")),
         ],
         render_kw={
-            "placeholder": _l("Write your thoughts here..."),
+            "placeholder": _l("What's happening?"),
+            "rows": 3,
+            "maxlength": 280,  # Browser-level enforcement
         },
     )
 
-    submit = SubmitField(_l("Save Note"))  # Generic name works for both Add and Edit
+    submit = SubmitField(_l("Post"))

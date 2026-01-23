@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
 class Note(db.Model):
     __tablename__ = "notes"
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text(280), nullable=False)
 
     created_at = db.Column(
         db.DateTime(timezone=True),
